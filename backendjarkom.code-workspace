@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "backendjarkom"
+		},
+		{
+			"name": "frontendjarkom",
+			"path": "frontendjarkom"
+		}
+	],
+	"settings": {
+		"java.configuration.updateBuildConfiguration": "interactive"
+	}
+}
