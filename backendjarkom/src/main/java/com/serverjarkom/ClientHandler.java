@@ -21,7 +21,7 @@ public class ClientHandler extends Thread {
         try (BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
              PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true)) {
 
-            // Read JSON string from client
+            // Read JSON string dari client
             String jsonString = in.readLine();
 
             // Parse JSON string
@@ -32,6 +32,7 @@ public class ClientHandler extends Thread {
                 String userName = jsonObject.getString("username");
                 String passUser = jsonObject.getString("password");
 
+                // Validasi login ke database
                 if (login(userName, passUser)) {
                     System.out.println("Password benar!");
                     String token = generateToken();
@@ -47,7 +48,7 @@ public class ClientHandler extends Thread {
                 String passUser = jsonObject.getString("password");
                 String name = jsonObject.getString("name");
 
-                // Insert user into the database
+                // Tambah user ke database
                 if (register(userName, passUser, name)) {
                     System.out.println("Registrasi berhasil");
                     jsonResponse.put("status", "Registrasi berhasil");
@@ -63,6 +64,21 @@ public class ClientHandler extends Thread {
 
         } catch (IOException | JSONException e) {
             e.printStackTrace();
+        }
+    }
+    private boolean register(String userName, String passUser, String name) {
+        String insertUserSQL = "INSERT INTO users (id_user, user_name, pass_user, name) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(insertUserSQL)) {
+            String userId = UUID.randomUUID().toString(); // Unik ID
+            preparedStatement.setString(1, userId);
+            preparedStatement.setString(2, userName);
+            preparedStatement.setString(3, passUser);
+            preparedStatement.setString(4, name);
+            int rowsAffected = preparedStatement.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 
@@ -82,21 +98,5 @@ public class ClientHandler extends Thread {
     private String generateToken() {
         // Generate a random login token
         return UUID.randomUUID().toString();
-    }
-
-    private boolean register(String userName, String passUser, String name) {
-        String insertUserSQL = "INSERT INTO users (id_user, user_name, pass_user, name) VALUES (?, ?, ?, ?)";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(insertUserSQL)) {
-            String userId = UUID.randomUUID().toString(); // Unik ID
-            preparedStatement.setString(1, userId);
-            preparedStatement.setString(2, userName);
-            preparedStatement.setString(3, passUser);
-            preparedStatement.setString(4, name);
-            int rowsAffected = preparedStatement.executeUpdate();
-            return rowsAffected > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
     }
 }
