@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"name": "frontendjarkom",
+			"path": "frontendjarkom"
+		},
+		{
+			"name": "backendjarkom",
+			"path": "backendjarkom"
+		}
+	],
+	"settings": {
+		"java.configuration.updateBuildConfiguration": "interactive",
+		"liveServer.settings.multiRootWorkspaceName": "frontendjarkom"
+	}
+}
