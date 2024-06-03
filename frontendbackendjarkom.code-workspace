@@ -10,7 +10,8 @@
 		}
 	],
 	"settings": {
-		"java.configuration.updateBuildConfiguration": "interactive",
-		"liveServer.settings.multiRootWorkspaceName": "frontendjarkom"
+		"java.configuration.updateBuildConfiguration": "automatic",
+		"liveServer.settings.multiRootWorkspaceName": "frontendjarkom",
+		"maven.view": "flat"
 	}
 }
