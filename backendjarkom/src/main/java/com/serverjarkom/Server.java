@@ -6,16 +6,16 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import com.serverjarkom.env.env;
+import com.serverjarkom.env.Env;
 
 public class Server {
     private static ExecutorService threadPool = Executors.newCachedThreadPool();
     private static Map<String, Room> rooms = new HashMap<>();
-    
-    public static void main (String[] args) {
+
+    public static void main(String[] args) {
         try {
-            ServerSocket serverSocket = new ServerSocket(env.PORT);
-            System.out.println("Server started on port " + env.PORT);
+            ServerSocket serverSocket = new ServerSocket(Env.PORT);
+            System.out.println("Server started on port " + Env.PORT);
 
             while (true) {
                 Socket socket = serverSocket.accept();
@@ -25,7 +25,7 @@ public class Server {
         } catch (Exception e) {
             // TODO: handle exception
             e.printStackTrace();
-        }finally {
+        } finally {
             threadPool.shutdown();
         }
 
@@ -34,15 +34,16 @@ public class Server {
     public static synchronized boolean addRoom(String roomName,Client client) {
         if(rooms.putIfAbsent(roomName, new Room(roomName,client)) == null){
             return true;
-        };
-        return false ;
+        }
+        ;
+        return false;
     }
 
     public static synchronized Room getRoom(String roomName) {
         return rooms.get(roomName);
     }
 
-    public static synchronized void allRooms(){
+    public static synchronized void allRooms() {
         for (Map.Entry<String, Room> room : rooms.entrySet()) {
             String key = room.getKey();
             Room value = room.getValue();

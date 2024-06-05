@@ -1,5 +1,6 @@
 package com.clientjarkom;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -29,5 +30,9 @@ public class LoginController {
 
     }
 
+    @FXML
+    private void goToRegister() throws IOException {
+        App.setRoot("register");
+    }
 
 }

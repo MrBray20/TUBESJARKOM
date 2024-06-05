@@ -1,4 +1,5 @@
 package com;
+
 import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.jupiter.api.Test;
 
@@ -9,13 +10,12 @@ import java.util.Calendar;
 import java.util.UUID;
 
 import com.google.gson.Gson;
-import com.serverjarkom.dbHandler;
-import com.serverjarkom.randomManager;
+import com.serverjarkom.DBhandler;
 import com.serverjarkom.randomManager;
 
 
 public class MessageConvert {
-    
+
     @Test
     public void testJson(){
         Chat texTest = new Chat("dssadf", "fsadfsa", "asdasd", "sddas"); 
@@ -29,16 +29,16 @@ public class MessageConvert {
         System.out.println(tes.getuserId());
         System.out.println(gson.toJson(texTest));
     }
+
     @Test
-    public void UUID(){
+    public void UUID() {
         UUID uuid = UUID.randomUUID();
         System.out.println(uuid.toString());
     }
 
-
     @Test
-    public void dbaa() throws SQLException{
-        dbHandler dbHandler = new dbHandler();
+    public void dbaa() throws SQLException {
+        DBhandler dbHandler = new DBhandler();
         ResultSet res = dbHandler.getRoom();
         while (res.next()) {
             System.out.println(res.getInt("id_room"));
