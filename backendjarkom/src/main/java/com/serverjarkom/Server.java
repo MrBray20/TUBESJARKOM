@@ -31,8 +31,8 @@ public class Server {
 
     }
 
-    public static synchronized boolean addRoom(String roomName) {
-        if(rooms.putIfAbsent(roomName, new Room(roomName)) == null){
+    public static synchronized boolean addRoom(String roomName,Client client) {
+        if(rooms.putIfAbsent(roomName, new Room(roomName,client)) == null){
             return true;
         };
         return false ;
@@ -46,7 +46,7 @@ public class Server {
         for (Map.Entry<String, Room> room : rooms.entrySet()) {
             String key = room.getKey();
             Room value = room.getValue();
-            value.getName();
+            value.getRoomName();
         }
     }
 }

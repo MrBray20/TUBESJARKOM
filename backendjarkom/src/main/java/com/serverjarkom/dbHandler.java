@@ -37,13 +37,6 @@ public class dbHandler {
         return statement = con.createStatement();
     }
     
-    private void closeStatement() throws SQLException{
-        statement.close();
-    }
-
-    private void closeConnection() throws SQLException{
-        connection.close();
-    }
 
     public ResultSet executeQuery (String string) throws SQLException{
         resultSet = statement.executeQuery(string);

@@ -1,30 +1,38 @@
 package com;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.json.*;
 import org.junit.jupiter.api.Test;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.UUID;
 
 import com.google.gson.Gson;
 import com.serverjarkom.dbHandler;
+import com.serverjarkom.randomManager;
+import com.serverjarkom.randomManager;
 
 
 public class MessageConvert {
     
     @Test
     public void testJson(){
-        Text texTest = new Text("dssadf", "fsadfsa", "asdasd", "sddas"); 
+        Chat texTest = new Chat("dssadf", "fsadfsa", "asdasd", "sddas"); 
         Gson gson = new Gson();
         
+        String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
 
+        System.out.println(timeStamp);
+        String a = gson.toJson(texTest);
+        Chat tes = gson.fromJson(a, Chat.class);
+        System.out.println(tes.getuserId());
         System.out.println(gson.toJson(texTest));
     }
     @Test
     public void UUID(){
         UUID uuid = UUID.randomUUID();
-        System.out.println(uuid);
+        System.out.println(uuid.toString());
     }
 
 
@@ -36,7 +44,6 @@ public class MessageConvert {
             System.out.println(res.getInt("id_room"));
             System.out.println(res.getString("name_room"));
             System.out.println(res.getTimestamp("created_at"));
-            System.out.println("im here");
         };
 
         dbHandler.close();
@@ -45,9 +52,19 @@ public class MessageConvert {
 
     @Test
     public void SHA256(){
-        String shaString = DigestUtils.sha256Hex("oasdkjfpsadjfps");
+        String shaString = DigestUtils.sha256Hex("hallo");
         System.out.println(shaString);
     }
+
+
+    @Test
+    public void randomCode(){
+        
+
+        
+        System.out.println(randomManager.codeRoom());
+    }
 }
+
 
 

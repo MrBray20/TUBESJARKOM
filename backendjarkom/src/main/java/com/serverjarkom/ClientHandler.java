@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,13 +30,13 @@ public ClientHandler(Socket socket) throws IOException{
             out.println("Silahkan masukkan nama");
             String nama = in.readLine();
 
-            client = new Client(nama);
+            client = new Client(randomManager.getUUID(),nama);
             listJoinedRooms();
             String message;
             while ((message = in.readLine()) != null) {
                 if(message.startsWith("/join ")){
                     if (currentRoom != null) {
-                        out.println("Silahkan keluar room terlebih dahulu !!!");
+                        sendMessage("Silahkan keluar room terlebih dahulu !!!");
                     }else{
                         joinRoom(message.substring(6));
                     }
@@ -53,7 +52,17 @@ public ClientHandler(Socket socket) throws IOException{
                     listJoinedRooms();
                 }else if((currentRoom != null) && message.equalsIgnoreCase("/people")){
                     showMember();
-                }else if(currentRoom != null){
+                }else if(message.startsWith("/kick ")){
+                    if(currentRoom == null){
+                        sendMessage("anda tidak berada dalam room jadi tidak bisa mengeluarkan orang");
+                    }
+                    else{
+                        currentRoom.kick(message.substring(6),this);
+                    }
+                }else if(message.equals("/deleteroom")){
+                    deleteRoom();
+                }
+                else if(currentRoom != null){
                     currentRoom.broadcast(message, this);
                 }
             }
@@ -64,10 +73,18 @@ public ClientHandler(Socket socket) throws IOException{
         
     }
 
+
+
+    public void deleteRoom(){
+        if (currentRoom != null) {
+            currentRoom.deletethisRoom(this);
+        }
+    }
+
     public void createRooom() throws IOException{
         out.println("Silahkan masukkan nama room");
         String roomName = in.readLine();
-        boolean isNewRoom = Server.addRoom(roomName);
+        boolean isNewRoom = Server.addRoom(roomName,this.client);
         currentRoom = Server.getRoom(roomName);
         currentRoom.addClient(this);
         roomsJoined.add(currentRoom);
@@ -89,17 +106,42 @@ public ClientHandler(Socket socket) throws IOException{
         if(currentRoom != null){
             currentRoom.removeClient(this);
             roomsJoined.remove(currentRoom);
-            out.println("Meninggalkan room " + currentRoom.getName());
+            sendMessage("Meninggalkan room " + currentRoom.getRoomName());
             currentRoom = null;
         }
     }
 
+    public boolean kickedClient(Room room){
+        if(this.roomsJoined.contains(room)){
+            this.roomsJoined.remove(room);
+            if(currentRoom.equals(room)){
+                currentRoom = null;
+            }
+            sendMessage("Kamu dikeluarkan dari room:" + room.getRoomName());
+            return true;
+        }
+        return false;
+    }
+
     public void exit(){
         if(currentRoom != null){
-            out.println("Keluar room " + currentRoom.getName());
+            sendMessage("Keluar room " + currentRoom.getRoomName());
             currentRoom = null;
         }
     }
+
+    public void leaveRoom(Room room){
+        if (this.roomsJoined.contains(room)){
+            if(currentRoom == room){
+                roomsJoined.remove(room);
+                currentRoom = null;
+            }
+        }
+    }
+
+    // private Set<Room> listJoinedRooms(ClientHandler client) {
+    //     return this.roomsJoined;
+    // }
 
     private void listJoinedRooms() {
         if (roomsJoined.isEmpty()) {
@@ -107,14 +149,14 @@ public ClientHandler(Socket socket) throws IOException{
         } else {
             out.println("Room yang sudah kamu join:");
             for (Room room : roomsJoined) {
-                out.println(room.getName());
+                out.println(room.getRoomName());
             }
         }
     }
 
     private void accessRoom(){
         if (currentRoom != null){
-            out.println("Sekaran kamu berada pada room : " + currentRoom.getName());
+            out.println("Sekarang kamu berada pada room : " + currentRoom.getRoomName());
         }else{
             out.println("Kamu tidak didalam room");
         }
@@ -126,15 +168,11 @@ public ClientHandler(Socket socket) throws IOException{
 
 
     public void showMember (){
-        Set<ClientHandler> users = currentRoom.getClients();
-            out.println("user didalam room " + currentRoom.getName() + ":");
-            for (ClientHandler user : users) {
-                out.println(user.client.name);
-            }
+        currentRoom.showMember(this);
     }
     
 
-    public String getClientName(){
-        return this.client.name;
+    public Client getClient(){
+        return this.client;
     }
 }
