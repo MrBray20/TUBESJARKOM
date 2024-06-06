@@ -31,7 +31,7 @@ public class DBhandler {
     }
 
     private Statement createStatemend(Connection con) throws SQLException {
-        return statement = con.createStatement();
+        return con.createStatement();
     }
 
     private void closeStatement() throws SQLException {

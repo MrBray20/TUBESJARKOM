@@ -18,38 +18,35 @@ public class ClientHandler implements Runnable {
     private Room currentRoom;
     private Set<Room> roomsJoined = new HashSet<>();
 
-
-
-
-
-    
     public ClientHandler(Socket socket) throws IOException {
         this.socket = socket;
         out = new PrintWriter(socket.getOutputStream(), true);
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
     }
 
     @Override
     public void run() {
         try {
-            boolean credentials = false;
-            DBhandler db = new DBhandler();
-            String nama = null;
-            while (!credentials) {
-                out.println("Silahkan masukkan username");
-                String username = in.readLine();
-                out.println("Silahkan masukkan password");
-                String password = in.readLine();
-                ResultSet rs = db.dbCredential(username, password);
+            // boolean credentials = false;
+            // DBhandler db = new DBhandler();
+            // String nama = null;
+            // while (!credentials) {
+            //     out.println("Silahkan masukkan username");
+            //     String username = in.readLine();
+            //     out.println("Silahkan masukkan password");
+            //     String password = in.readLine();
+            //     ResultSet rs = db.dbCredential(username, password);
 
-                if (rs.next()) {
-                    nama = rs.getString(4);
-                    credentials = true;
-                } else {
-                    out.println("Username atau password salah!");
-                }
-            }
+            //     if (rs.next()) {
+            //         nama = rs.getString(4);
+            //         credentials = true;
+            //     } else {
+            //         out.println("Username atau password salah!");
+            //     }
+            // }
+
+            out.println("Silahkan masukkan nama");
+            String nama = in.readLine();
 
             client = new Client(randomManager.getUUID(),nama);
             listJoinedRooms();
@@ -90,10 +87,11 @@ public class ClientHandler implements Runnable {
 
         } catch (IOException e) {
             // TODO:s
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        } 
+        // catch (SQLException e) {
+        //     // TODO Auto-generated catch block
+        //     e.printStackTrace();
+        // }
 
     }
 

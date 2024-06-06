@@ -10,6 +10,9 @@ import java.util.Calendar;
 import java.util.UUID;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.serverjarkom.DBhandler;
 import com.serverjarkom.randomManager;
 
@@ -59,11 +62,32 @@ public class MessageConvert {
 
     @Test
     public void randomCode(){
-        
-
-        
         System.out.println(randomManager.codeRoom());
     }
+
+
+    @Test
+    public void messageTest(){
+        Gson gson = new Gson();
+        String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
+
+
+        ChatMessage chat = new ChatMessage();
+        chat.setMessage("ahay", "hello", "agus", timeStamp);
+
+        CommadMessage command = new CommadMessage();
+
+        command.setCommad("/help");
+
+        System.out.println(gson.toJson(command));
+
+        System.out.println(gson.toJson(chat));
+        String json = gson.toJson(chat);
+        JsonObject jsonObject = JsonParser.parseString(json).getAsJsonObject();
+        CommadMessage inchat = gson.fromJson(json,CommadMessage.class);
+        System.out.println(inchat.getType());
+    }
+
 }
 
 
