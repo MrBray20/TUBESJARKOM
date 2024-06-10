@@ -150,8 +150,8 @@ public class ClientHandler implements Runnable {
         if (currentRoom != null) {
             currentRoom.removeClient(this);
             roomsJoined.remove(currentRoom);
-            db.dbJoinRoom(currentRoom.getRoomName(), this.client.getName());
             sendMessage("Meninggalkan room " + currentRoom.getRoomName());
+            db.dbLeaveRoom(currentRoom.getRoomName(), this.client.getUUID());
             currentRoom = null;
         }
     }
@@ -163,6 +163,7 @@ public class ClientHandler implements Runnable {
                 currentRoom = null;
             }
             sendMessage("Kamu dikeluarkan dari room:" + room.getRoomName());
+
             return true;
         }
         return false;
