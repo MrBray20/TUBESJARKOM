@@ -29,27 +29,49 @@ public class ClientHandler implements Runnable {
     @Override
     public void run() {
         try {
-            boolean credentials = false;
-            String nama = null;
-            while (!credentials) {
+            out.println("Daftar/Login");
+            String context = in.readLine();
+            if (context.equalsIgnoreCase("daftar")) {
                 out.println("Silahkan masukkan username");
                 String username = in.readLine();
                 out.println("Silahkan masukkan password");
                 String password = in.readLine();
-                ResultSet rs = db.dbCredential(username, password);
+                out.println("Silahkan masukkan nama anda");
+                String nama = in.readLine();
+                String id = randomManager.getUUID();
+                client = new Client(id, username, password, nama);
+                db.dbRegister(id, username, password, nama);
+                Server.clients.add(client);
+            } else {
+                boolean credentials = false;
+                while (!credentials) {
+                    out.println("Silahkan masukkan username");
+                    String username = in.readLine();
+                    out.println("Silahkan masukkan password");
+                    String password = in.readLine();
 
-                if (rs.next()) {
-                    nama = rs.getString(4);
-                    credentials = true;
-                } else {
-                    out.println("Username atau password salah!");
+                    for (int i = 0; i < Server.clients.size(); i++) {
+                        System.out.println(Server.clients.get(i).getUsername());
+                        if (Server.clients.get(i).getUsername().equals(username)
+                                && Server.clients.get(i).getPassword().equals(password)) {
+                            credentials = true;
+                            client = Server.clients.get(i);
+                            ResultSet joinedRoomData = db.dbListJoinedRoom(client.getUUID());
+                            while (joinedRoomData.next()) {
+                                roomsJoined.add(Server.getRoom(joinedRoomData.getString(1)));
+                            }
+                        }
+                    }
+
+                    if (!credentials) {
+                        out.println("Username atau password salah!");
+                    }
                 }
             }
 
             // out.println("Silahkan masukkan nama");
             // String nama = in.readLine();
 
-            client = new Client(randomManager.getUUID(), nama);
             listJoinedRooms();
             String message;
             while ((message = in.readLine()) != null) {
@@ -93,37 +115,42 @@ public class ClientHandler implements Runnable {
 
     }
 
-    public void deleteRoom() {
+    public void deleteRoom() throws SQLException {
         if (currentRoom != null) {
             currentRoom.deletethisRoom(this);
+            db.dbDeleteRoom(this.currentRoom.getRoomName());
         }
     }
 
-    public void createRooom() throws IOException {
+    public void createRooom() throws IOException, SQLException {
         out.println("Silahkan masukkan nama room");
         String roomName = in.readLine();
         boolean isNewRoom = Server.addRoom(roomName, this.client);
         currentRoom = Server.getRoom(roomName);
         currentRoom.addClient(this);
         roomsJoined.add(currentRoom);
+        db.dbCreateRoom(roomName, "AHDSX", this.client.getUUID());
         out.println("Memasuki room: " + roomName);
     }
 
-    public void joinRoom(String roomName) {
+    public void joinRoom(String roomName) throws SQLException {
         currentRoom = Server.getRoom(roomName);
         if (currentRoom != null) {
             currentRoom.addClient(this);
             roomsJoined.add(currentRoom);
+            if (!roomsJoined.contains(currentRoom))
+                db.dbJoinRoom(roomName, this.client.getUUID());
             out.println("Memasuki room: " + roomName);
         } else {
             out.println("Room tidak tidak ada");
         }
     }
 
-    public void leaveRoom() {
+    public void leaveRoom() throws SQLException {
         if (currentRoom != null) {
             currentRoom.removeClient(this);
             roomsJoined.remove(currentRoom);
+            db.dbJoinRoom(currentRoom.getRoomName(), this.client.getName());
             sendMessage("Meninggalkan room " + currentRoom.getRoomName());
             currentRoom = null;
         }

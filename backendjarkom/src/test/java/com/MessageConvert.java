@@ -38,20 +38,20 @@ public class MessageConvert {
         System.out.println(uuid.toString());
     }
 
-    @Test
-    public void dbaa() throws SQLException {
-        dbHandler dbHandler = new dbHandler();
-        ResultSet res = dbHandler.getRoom();
-        while (res.next()) {
-            System.out.println(res.getInt("id_room"));
-            System.out.println(res.getString("name_room"));
-            System.out.println(res.getTimestamp("created_at"));
-        }
-        ;
+    // @Test
+    // public void dbaa() throws SQLException {
+    // dbHandler dbHandler = new dbHandler();
+    // ResultSet res = dbHandler.getRoom();
+    // while (res.next()) {
+    // System.out.println(res.getInt("id_room"));
+    // System.out.println(res.getString("name_room"));
+    // System.out.println(res.getTimestamp("created_at"));
+    // }
+    // ;
 
-        dbHandler.close();
+    // dbHandler.close();
 
-    }
+    // }
 
     @Test
     public void SHA256() {
