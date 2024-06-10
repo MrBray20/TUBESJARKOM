@@ -62,6 +62,14 @@ public class Server {
         return false;
     }
 
+    public static synchronized boolean deleteRoom(String roomName) {
+        if (rooms.remove(roomName) == null) {
+            return true;
+        }
+        ;
+        return false;
+    }
+
     public static synchronized Room getRoom(String roomName) {
         return rooms.get(roomName);
     }

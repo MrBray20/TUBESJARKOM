@@ -117,8 +117,10 @@ public class ClientHandler implements Runnable {
 
     public void deleteRoom() throws SQLException {
         if (currentRoom != null) {
-            currentRoom.deletethisRoom(this);
             db.dbDeleteRoom(this.currentRoom.getRoomName());
+            Server.deleteRoom(currentRoom.getRoomName());
+            currentRoom.deletethisRoom(this);
+
         }
     }
 
