@@ -7,11 +7,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.mysql.cj.jdbc.Driver;
-import com.serverjarkom.env.Env;
+import com.serverjarkom.env.env;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
-public class DBhandler {
+public class dbHandler {
 
     // private static HikariConfig config = new HikariConfig();
     // private static HikariDataSource ds ;
@@ -19,7 +19,7 @@ public class DBhandler {
     private Statement statement;
     private ResultSet resultSet;
 
-    public DBhandler() throws SQLException {
+    public dbHandler() throws SQLException {
         Driver dbJarkom = new com.mysql.cj.jdbc.Driver();
         DriverManager.registerDriver(dbJarkom);
         getConnection();
@@ -27,11 +27,11 @@ public class DBhandler {
     }
 
     private void getConnection() throws SQLException {
-        connection = DriverManager.getConnection(Env.DB_URL, Env.DB_USERNAME, Env.DB_PASSWORD);
+        connection = DriverManager.getConnection(env.DB_URL, env.DB_USERNAME, env.DB_PASSWORD);
     }
 
     private Statement createStatemend(Connection con) throws SQLException {
-        return con.createStatement();
+        return statement = con.createStatement();
     }
 
     private void closeStatement() throws SQLException {

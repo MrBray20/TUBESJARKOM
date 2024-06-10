@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import com.serverjarkom.env.Env;
+import com.serverjarkom.env.env;
 
 public class Server {
     private static ExecutorService threadPool = Executors.newCachedThreadPool();
@@ -14,8 +14,8 @@ public class Server {
 
     public static void main(String[] args) {
         try {
-            ServerSocket serverSocket = new ServerSocket(Env.PORT);
-            System.out.println("Server started on port " + Env.PORT);
+            ServerSocket serverSocket = new ServerSocket(env.PORT);
+            System.out.println("Server started on port " + env.PORT);
 
             while (true) {
                 Socket socket = serverSocket.accept();
@@ -31,8 +31,8 @@ public class Server {
 
     }
 
-    public static synchronized boolean addRoom(String roomName,Client client) {
-        if(rooms.putIfAbsent(roomName, new Room(roomName,client)) == null){
+    public static synchronized boolean addRoom(String roomName, Client client) {
+        if (rooms.putIfAbsent(roomName, new Room(roomName, client)) == null) {
             return true;
         }
         ;

@@ -16,46 +16,47 @@ public class ClientHandler implements Runnable {
     private BufferedReader in;
     private Client client;
     private Room currentRoom;
+    private dbHandler db;
     private Set<Room> roomsJoined = new HashSet<>();
 
-    public ClientHandler(Socket socket) throws IOException {
+    public ClientHandler(Socket socket) throws IOException, SQLException {
         this.socket = socket;
         out = new PrintWriter(socket.getOutputStream(), true);
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        db = new dbHandler();
     }
 
     @Override
     public void run() {
         try {
-            // boolean credentials = false;
-            // DBhandler db = new DBhandler();
-            // String nama = null;
-            // while (!credentials) {
-            //     out.println("Silahkan masukkan username");
-            //     String username = in.readLine();
-            //     out.println("Silahkan masukkan password");
-            //     String password = in.readLine();
-            //     ResultSet rs = db.dbCredential(username, password);
+            boolean credentials = false;
+            String nama = null;
+            while (!credentials) {
+                out.println("Silahkan masukkan username");
+                String username = in.readLine();
+                out.println("Silahkan masukkan password");
+                String password = in.readLine();
+                ResultSet rs = db.dbCredential(username, password);
 
-            //     if (rs.next()) {
-            //         nama = rs.getString(4);
-            //         credentials = true;
-            //     } else {
-            //         out.println("Username atau password salah!");
-            //     }
-            // }
+                if (rs.next()) {
+                    nama = rs.getString(4);
+                    credentials = true;
+                } else {
+                    out.println("Username atau password salah!");
+                }
+            }
 
-            out.println("Silahkan masukkan nama");
-            String nama = in.readLine();
+            // out.println("Silahkan masukkan nama");
+            // String nama = in.readLine();
 
-            client = new Client(randomManager.getUUID(),nama);
+            client = new Client(randomManager.getUUID(), nama);
             listJoinedRooms();
             String message;
             while ((message = in.readLine()) != null) {
                 if (message.startsWith("/join ")) {
                     if (currentRoom != null) {
                         sendMessage("Silahkan keluar room terlebih dahulu !!!");
-                    }else{
+                    } else {
                         joinRoom(message.substring(6));
                     }
                 } else if (message.equalsIgnoreCase("/leave")) {
@@ -70,43 +71,38 @@ public class ClientHandler implements Runnable {
                     listJoinedRooms();
                 } else if ((currentRoom != null) && message.equalsIgnoreCase("/people")) {
                     showMember();
-                }else if(message.startsWith("/kick ")){
-                    if(currentRoom == null){
+                } else if (message.startsWith("/kick ")) {
+                    if (currentRoom == null) {
                         sendMessage("anda tidak berada dalam room jadi tidak bisa mengeluarkan orang");
+                    } else {
+                        currentRoom.kick(message.substring(6), this);
                     }
-                    else{
-                        currentRoom.kick(message.substring(6),this);
-                    }
-                }else if(message.equals("/deleteroom")){
+                } else if (message.equals("/deleteroom")) {
                     deleteRoom();
-                }
-                else if(currentRoom != null){
+                } else if (currentRoom != null) {
                     currentRoom.broadcast(message, this);
                 }
             }
 
         } catch (IOException e) {
             // TODO:s
-        } 
-        // catch (SQLException e) {
-        //     // TODO Auto-generated catch block
-        //     e.printStackTrace();
-        // }
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
     }
 
-
-
-    public void deleteRoom(){
+    public void deleteRoom() {
         if (currentRoom != null) {
             currentRoom.deletethisRoom(this);
         }
     }
 
-    public void createRooom() throws IOException{
+    public void createRooom() throws IOException {
         out.println("Silahkan masukkan nama room");
         String roomName = in.readLine();
-        boolean isNewRoom = Server.addRoom(roomName,this.client);
+        boolean isNewRoom = Server.addRoom(roomName, this.client);
         currentRoom = Server.getRoom(roomName);
         currentRoom.addClient(this);
         roomsJoined.add(currentRoom);
@@ -133,10 +129,10 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    public boolean kickedClient(Room room){
-        if(this.roomsJoined.contains(room)){
+    public boolean kickedClient(Room room) {
+        if (this.roomsJoined.contains(room)) {
             this.roomsJoined.remove(room);
-            if(currentRoom.equals(room)){
+            if (currentRoom.equals(room)) {
                 currentRoom = null;
             }
             sendMessage("Kamu dikeluarkan dari room:" + room.getRoomName());
@@ -145,16 +141,16 @@ public class ClientHandler implements Runnable {
         return false;
     }
 
-    public void exit(){
-        if(currentRoom != null){
+    public void exit() {
+        if (currentRoom != null) {
             sendMessage("Keluar room " + currentRoom.getRoomName());
             currentRoom = null;
         }
     }
 
-    public void leaveRoom(Room room){
-        if (this.roomsJoined.contains(room)){
-            if(currentRoom == room){
+    public void leaveRoom(Room room) {
+        if (this.roomsJoined.contains(room)) {
+            if (currentRoom == room) {
                 roomsJoined.remove(room);
                 currentRoom = null;
             }
@@ -162,7 +158,7 @@ public class ClientHandler implements Runnable {
     }
 
     // private Set<Room> listJoinedRooms(ClientHandler client) {
-    //     return this.roomsJoined;
+    // return this.roomsJoined;
     // }
 
     private void listJoinedRooms() {
@@ -176,10 +172,10 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    private void accessRoom(){
-        if (currentRoom != null){
+    private void accessRoom() {
+        if (currentRoom != null) {
             out.println("Sekarang kamu berada pada room : " + currentRoom.getRoomName());
-        }else{
+        } else {
             out.println("Kamu tidak didalam room");
         }
     }
@@ -188,12 +184,11 @@ public class ClientHandler implements Runnable {
         out.println(message);
     }
 
-
-    public void showMember (){
+    public void showMember() {
         currentRoom.showMember(this);
     }
 
-    public Client getClient(){
+    public Client getClient() {
         return this.client;
     }
 }

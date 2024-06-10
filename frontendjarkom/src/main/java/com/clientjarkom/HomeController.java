@@ -27,8 +27,8 @@ public class HomeController {
     private Button sendButton;
 
     @FXML
-    void buttonCreateClick(ActionEvent event) {
-
+    void buttonCreateClick(ActionEvent event) throws Exception {
+        App.showDialog();
     }
 
     @FXML
