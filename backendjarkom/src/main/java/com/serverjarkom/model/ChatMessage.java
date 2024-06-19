@@ -1,6 +1,4 @@
-package com.clientjarkom.model;
-
-
+package com.serverjarkom.model;
 
 public class ChatMessage extends Message{
     private String room;

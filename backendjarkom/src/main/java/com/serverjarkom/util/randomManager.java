@@ -1,4 +1,4 @@
-package com.serverjarkom;
+package com.serverjarkom.util;
 
 import java.util.UUID;
 

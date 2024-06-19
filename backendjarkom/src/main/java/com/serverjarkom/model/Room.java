@@ -1,7 +1,10 @@
-package com.serverjarkom;
+package com.serverjarkom.model;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import com.serverjarkom.controller.ClientHandler;
+import com.serverjarkom.util.randomManager;
 
 import java.util.Iterator;
 

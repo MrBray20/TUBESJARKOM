@@ -2,13 +2,18 @@ package com.clientjarkom.model;
 
 public class CommadMessage extends Message {
     
+    private String command;
     private String message;
 
     public CommadMessage(){
-        this.Type = "command";
+        this.type = "command";
     }
 
-    public void setCommad(String message) {
+    public void setCommad(String command) {
+        this.command = command;
+    }
+
+    public void setMessage(String message){
         this.message = message;
     }
 
@@ -19,6 +24,10 @@ public class CommadMessage extends Message {
     }
 
     public String getCommand() {
+        return command;
+    }
+
+    public String getMessage() {
         return message;
     }
 }

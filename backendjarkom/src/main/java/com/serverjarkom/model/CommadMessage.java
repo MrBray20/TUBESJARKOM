@@ -1,12 +1,11 @@
-package com;
-
+package com.serverjarkom.model;
 public class CommadMessage extends Message {
     
     private String commad;
     private String message;
 
     public CommadMessage(){
-        this.Type = "command";
+        this.type = "command";
     }
 
     public void setCommad(String commad) {
@@ -24,7 +23,7 @@ public class CommadMessage extends Message {
     }
 
     public String getCommand() {
-        return message;
+        return commad;
     }
 
     public String getMessage() {

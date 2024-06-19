@@ -1,5 +1,5 @@
-package com;
 
+package com;
 public class Chat {
     private String user_id ;
     private String room_id;

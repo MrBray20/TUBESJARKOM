@@ -6,7 +6,10 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import com.serverjarkom.controller.ClientHandler;
 import com.serverjarkom.env.Env;
+import com.serverjarkom.model.Client;
+import com.serverjarkom.model.Room;
 
 public class Server {
     private static ExecutorService threadPool = Executors.newCachedThreadPool();

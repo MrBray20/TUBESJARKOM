@@ -1,4 +1,4 @@
-package com.serverjarkom;
+package com.serverjarkom.model;
 
 public class Client {
     private String UUID;

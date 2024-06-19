@@ -1,4 +1,4 @@
-package com.clientjarkom;
+package com.clientjarkom.view;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

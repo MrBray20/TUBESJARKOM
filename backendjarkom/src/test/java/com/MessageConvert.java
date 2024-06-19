@@ -13,8 +13,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.serverjarkom.DBhandler;
-import com.serverjarkom.randomManager;
+import com.serverjarkom.controller.DBhandler;
+import com.serverjarkom.util.randomManager;
 
 
 public class MessageConvert {
@@ -76,14 +76,18 @@ public class MessageConvert {
         chat.setMessage("ahay", "hello", "agus", timeStamp);
 
         CommadMessage command = new CommadMessage();
+        command.setCommad(timeStamp);
+        command.setMessage("test");
 
-        command.setCommad("/help");
-
-        System.out.println(gson.toJson(command));
+        System.out.println(command.getCommand());
+        System.out.println(command.getMessage());
 
         System.out.println(gson.toJson(chat));
         String json = gson.toJson(chat);
+        
         JsonObject jsonObject = JsonParser.parseString(json).getAsJsonObject();
+        String classname = jsonObject.get("Type").getAsString();
+        System.out.println(classname); 
         CommadMessage inchat = gson.fromJson(json,CommadMessage.class);
         System.out.println(inchat.getType());
     }

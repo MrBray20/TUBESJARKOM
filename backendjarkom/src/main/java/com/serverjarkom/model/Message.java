@@ -1,4 +1,4 @@
-package com.clientjarkom.model;
+package com.serverjarkom.model;
 
 import java.io.Serializable;
 

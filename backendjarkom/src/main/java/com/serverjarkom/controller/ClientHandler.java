@@ -1,4 +1,4 @@
-package com.serverjarkom;
+package com.serverjarkom.controller;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,6 +10,16 @@ import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.serverjarkom.Server;
+import com.serverjarkom.model.ChatMessage;
+import com.serverjarkom.model.Client;
+import com.serverjarkom.model.CommadMessage;
+import com.serverjarkom.model.Room;
+import com.serverjarkom.util.randomManager;
+
 public class ClientHandler implements Runnable {
     private Socket socket;
     private PrintWriter out;
@@ -17,11 +27,20 @@ public class ClientHandler implements Runnable {
     private Client client;
     private Room currentRoom;
     private Set<Room> roomsJoined = new HashSet<>();
+    private ChatMessage chatMessage;
+    private CommadMessage commadMessage;
+    private JsonObject jsonObject;
+    private Gson gson;
+    private HandlerMessage handlerMessage;
 
     public ClientHandler(Socket socket) throws IOException {
         this.socket = socket;
         out = new PrintWriter(socket.getOutputStream(), true);
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        chatMessage = new ChatMessage();
+        commadMessage = new CommadMessage();
+        gson = new Gson();
+        handlerMessage = new HandlerMessage();
     }
 
     @Override
@@ -44,14 +63,32 @@ public class ClientHandler implements Runnable {
             //         out.println("Username atau password salah!");
             //     }
             // }
-
             out.println("Silahkan masukkan nama");
             String nama = in.readLine();
+            this.jsonObject = JsonParser.parseString(nama).getAsJsonObject();
+            String type = jsonObject.get("type").getAsString();
+            
+            if(type.equals("command")){
+                commadMessage = gson.fromJson(nama, CommadMessage.class);
+            }
 
-            client = new Client(randomManager.getUUID(),nama);
+            client = new Client(randomManager.getUUID(),commadMessage.getMessage());
             listJoinedRooms();
             String message;
             while ((message = in.readLine()) != null) {
+                if(handlerMessage.InMessage(message).equals("command")){
+                    if (handlerMessage.getInCommadMessage().getCommand().startsWith("/join ")) {
+                        if (currentRoom != null) {
+                            sendMessage("Silahkan keluar room terlebih dahulu !!!");
+                        }else{
+                            joinRoom(message.substring(6));
+                        }
+                } else if(handlerMessage.InMessage(message).equals("chat")){
+                    
+                }
+
+
+
                 if (message.startsWith("/join ")) {
                     if (currentRoom != null) {
                         sendMessage("Silahkan keluar room terlebih dahulu !!!");

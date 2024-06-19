@@ -1,4 +1,4 @@
-package com.serverjarkom;
+package com.serverjarkom.controller;
 
 import java.sql.Statement;
 import java.sql.Connection;
