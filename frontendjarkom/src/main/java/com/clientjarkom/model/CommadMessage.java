@@ -1,16 +1,30 @@
 package com.clientjarkom.model;
 
+import java.util.Map;
+
 public class CommadMessage extends Message {
     
-    private String command;
+    private String action;
     private String message;
+    private Map<String,String> rooms;
 
-    public CommadMessage(){
-        this.type = "command";
+    
+
+    public CommadMessage(String action,String message){
+        super("command");
+        this.action = action;
+        this.message = message;
     }
 
-    public void setCommad(String command) {
-        this.command = command;
+    public CommadMessage(String action,String message,Map<String,String> room){
+        super("command");
+        this.action = action;
+        this.message = message;
+        this.rooms = room;
+    }
+
+    public void setCommad(String action) {
+        this.action = action;
     }
 
     public void setMessage(String message){
@@ -24,10 +38,14 @@ public class CommadMessage extends Message {
     }
 
     public String getCommand() {
-        return command;
+        return action;
     }
 
     public String getMessage() {
         return message;
+    }
+
+    public Map<String,String> getroom(){
+        return this.rooms;
     }
 }

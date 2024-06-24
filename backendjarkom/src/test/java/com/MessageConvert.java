@@ -16,14 +16,13 @@ import com.google.gson.JsonParser;
 import com.serverjarkom.controller.DBhandler;
 import com.serverjarkom.util.randomManager;
 
-
 public class MessageConvert {
 
     @Test
-    public void testJson(){
-        Chat texTest = new Chat("dssadf", "fsadfsa", "asdasd", "sddas"); 
+    public void testJson() {
+        Chat texTest = new Chat("dssadf", "fsadfsa", "asdasd", "sddas");
         Gson gson = new Gson();
-        
+
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
 
         System.out.println(timeStamp);
@@ -39,38 +38,36 @@ public class MessageConvert {
         System.out.println(uuid.toString());
     }
 
+    // @Test
+    // public void dbaa() throws SQLException {
+    // dbHandler dbHandler = new dbHandler();
+    // ResultSet res = dbHandler.getRoom();
+    // while (res.next()) {
+    // System.out.println(res.getInt("id_room"));
+    // System.out.println(res.getString("name_room"));
+    // System.out.println(res.getTimestamp("created_at"));
+    // }
+    // ;
+
+    // dbHandler.close();
+
+    // }
+
     @Test
-    public void dbaa() throws SQLException {
-        DBhandler dbHandler = new DBhandler();
-        ResultSet res = dbHandler.getRoom();
-        while (res.next()) {
-            System.out.println(res.getInt("id_room"));
-            System.out.println(res.getString("name_room"));
-            System.out.println(res.getTimestamp("created_at"));
-        };
-
-        dbHandler.close();
-
-    }
-
-    @Test
-    public void SHA256(){
+    public void SHA256() {
         String shaString = DigestUtils.sha256Hex("hallo");
         System.out.println(shaString);
     }
 
-
     @Test
-    public void randomCode(){
+    public void randomCode() {
         System.out.println(randomManager.codeRoom());
     }
 
-
     @Test
-    public void messageTest(){
+    public void messageTest() {
         Gson gson = new Gson();
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
-
 
         ChatMessage chat = new ChatMessage();
         chat.setMessage("ahay", "hello", "agus", timeStamp);
@@ -93,6 +90,3 @@ public class MessageConvert {
     }
 
 }
-
-
-

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<GridPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21" fx:controller="com.clientjarkom.views.DialogController"
+          hgap="2" vgap="1" alignment="CENTER" style="-fx-background-color: white;">
+    <columnConstraints>
+        <ColumnConstraints percentWidth="30"/>
+        <ColumnConstraints percentWidth="70"/>
+    </columnConstraints>
+
+    <VBox spacing="20" GridPane.columnIndex="0" GridPane.rowIndex="0" style="-fx-background-color: #D3D3D3; -fx-padding: 20;">
+        <Button text="Info" onAction="#showInfo" maxWidth="Infinity" style="-fx-background-color: #1E3D7C; -fx-text-fill: white;"/>
+        <Button text="Member" onAction="#showMembers" maxWidth="Infinity" style="-fx-background-color: #1E3D7C; -fx-text-fill: white;"/>
+    </VBox>
+
+    <VBox fx:id="infoPane" GridPane.columnIndex="1" GridPane.rowIndex="0" spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 20;" maxWidth="Infinity">
+        <GridPane hgap="10" vgap="10" alignment="CENTER_LEFT">
+            <Label text="Name"/>
+            <HBox style=" -fx-padding: 5; -fx-border-color: #000000; -fx-border-width: 2; -fx-border-radius: 10; -fx-pref-width: 300;" GridPane.columnIndex="1">
+                <Label text="YANG BENAR AJA" />
+            </HBox>
+            <Label text="Owner" GridPane.rowIndex="1"/>
+            <HBox style=" -fx-padding: 5; -fx-border-color: #000000; -fx-border-width: 2; -fx-border-radius: 10; -fx-pref-width: 300;" GridPane.rowIndex="1"  GridPane.columnIndex="1">
+                <Label text="Bray" />
+            </HBox>
+
+            <Label text="Created" GridPane.rowIndex="2"/>
+            <HBox style=" -fx-padding: 5; -fx-border-color: #000000; -fx-border-width: 2; -fx-border-radius: 10; -fx-pref-width: 300;" GridPane.rowIndex="2"  GridPane.columnIndex="1">
+                <Label text="28/5/2024" />
+            </HBox>
+
+            <Label text="Code Room" GridPane.rowIndex="3"/>
+            <HBox style=" -fx-padding: 5; -fx-border-color: #000000; -fx-border-width: 2; -fx-border-radius: 10; -fx-pref-width: 300;" GridPane.rowIndex="3"  GridPane.columnIndex="1">
+                <Label text="AEWIAORSJ" />
+            </HBox>
+            <Button text="Exit Room" onAction="#handleExitRoom" style="-fx-background-color: #1E3D7C; -fx-text-fill: white; -fx-pref-width: 90;" GridPane.rowIndex="8"/>
+
+        </GridPane>
+    </VBox>
+
+    <!-- <ListView fx:id="memberListView" GridPane.columnIndex="1" GridPane.rowIndex="0" visible="false" style="-fx-padding: 20;"/> -->
+</GridPane>

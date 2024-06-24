@@ -7,7 +7,7 @@ public class ChatMessage extends Message{
     private String timeStamp ;
 
     public ChatMessage(){
-        this.type =  "chat";
+        super("chat");
     }
     
     public void setMessage(String room, String message, String sender, String timeStamp) {

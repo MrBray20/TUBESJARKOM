@@ -1,12 +1,18 @@
 package com.serverjarkom;
 
 import java.net.*;
+import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import com.serverjarkom.controller.ClientHandler;
+import com.serverjarkom.controller.DBhandler;
 import com.serverjarkom.env.Env;
 import com.serverjarkom.model.Client;
 import com.serverjarkom.model.Room;
@@ -14,9 +20,28 @@ import com.serverjarkom.model.Room;
 public class Server {
     private static ExecutorService threadPool = Executors.newCachedThreadPool();
     private static Map<String, Room> rooms = new HashMap<>();
+    public static ArrayList<Client> clients = new ArrayList<>();
+    public static DBhandler db;
 
     public static void main(String[] args) {
         try {
+            db = new DBhandler();
+            // ResultSet clientData = db.dblistClient();
+            // while (clientData.next()) {
+            //     Client client = new Client(clientData.getString(1), clientData.getString(2), clientData.getString(3),
+            //             clientData.getString(4));
+            //     clients.add(client);
+            // }
+            // ResultSet roomData = db.dblistRoom();
+            // while (roomData.next()) {
+            //     Client cl = null;
+            //     for (int i = 0; i < clients.size(); i++) {
+            //         if (clients.get(i).getUUID().equals(roomData.getString(5))) {
+            //             cl = clients.get(i);
+            //         }
+            //     }
+            //     addRoom(roomData.getString(2), cl);
+            // }
             ServerSocket serverSocket = new ServerSocket(Env.PORT);
             System.out.println("Server started on port " + Env.PORT);
 
@@ -34,11 +59,17 @@ public class Server {
 
     }
 
-    public static synchronized boolean addRoom(String roomName,Client client) {
-        if(rooms.putIfAbsent(roomName, new Room(roomName,client)) == null){
+    public static synchronized boolean addRoom(String roomName, Client client) {
+        if (rooms.putIfAbsent(roomName, new Room(roomName, client)) == null) {
             return true;
         }
-        ;
+        return false;
+    }
+
+    public static synchronized boolean deleteRoom(String roomName) {
+        if (rooms.remove(roomName) == null) {
+            return true;
+        }
         return false;
     }
 

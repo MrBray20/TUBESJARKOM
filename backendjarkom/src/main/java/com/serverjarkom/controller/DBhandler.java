@@ -31,7 +31,7 @@ public class DBhandler {
     }
 
     private Statement createStatemend(Connection con) throws SQLException {
-        return con.createStatement();
+        return statement = con.createStatement();
     }
 
     private void closeStatement() throws SQLException {
@@ -43,13 +43,61 @@ public class DBhandler {
         return resultSet;
     }
 
-    public ResultSet getRoom() throws SQLException {
-        resultSet = statement.executeQuery("CALL showrooms()");
+    // public ResultSet getRoom() throws SQLException {
+    // resultSet = statement.executeQuery("CALL showrooms()");
+    // return resultSet;
+    // }
+    
+    public ResultSet dbRegister(String idClient, String username, String password, String clientName)
+            throws SQLException {
+        resultSet = statement.executeQuery("CALL register(\"" + idClient + "\", \"" + username + "\", \"" + password
+                + "\", \"" + clientName + "\")");
         return resultSet;
     }
 
     public ResultSet dbCredential(String username, String password) throws SQLException {
         resultSet = statement.executeQuery("CALL credential(\"" + username + "\", \"" + password + "\")");
+        return resultSet;
+    }
+
+    public ResultSet dblistClient() throws SQLException {
+        resultSet = statement.executeQuery("CALL listClient()");
+        return resultSet;
+    }
+
+    public ResultSet dblistRoom() throws SQLException {
+        resultSet = statement.executeQuery("CALL listRoom()");
+        return resultSet;
+    }
+
+    public ResultSet dbListJoinedRoom(String idClient) throws SQLException {
+        resultSet = statement.executeQuery("CALL listJoinedRoom(\"" + idClient + "\")");
+        return resultSet;
+    }
+
+    public ResultSet dbCreateRoom(String roomName, String roomCode, String roomOwner) throws SQLException {
+        resultSet = statement
+                .executeQuery("CALL createRoom(\"" + roomName + "\", \"" + roomCode + "\", \"" + roomOwner + "\")");
+        return resultSet;
+    }
+
+    public ResultSet dbJoinRoom(String roomName, String idClient) throws SQLException {
+        resultSet = statement.executeQuery("CALL joinRoom(\"" + roomName + "\", \"" + idClient + "\")");
+        return resultSet;
+    }
+
+    public ResultSet dbLeaveRoom(String roomName, String idClient) throws SQLException {
+        resultSet = statement.executeQuery("CALL leaveRoom(\"" + roomName + "\", \"" + idClient + "\")");
+        return resultSet;
+    }
+
+    public ResultSet dbDeleteRoom(String roomName) throws SQLException {
+        resultSet = statement.executeQuery("CALL deleteRoom(\"" + roomName + "\")");
+        return resultSet;
+    }
+
+    public ResultSet dbLogin(String username, String password) throws SQLException{
+        resultSet = statement.executeQuery("CALL login(\"" + username + "\",\"" + password + "\")");
         return resultSet;
     }
 

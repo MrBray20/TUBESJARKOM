@@ -1,13 +1,13 @@
-package com.clientjarkom.model;
+package com.serverjarkom.model;
 
-public class ChatMessage extends Message{
+public class ChatResponseMessage extends Message{
     private String room;
     private String message;
     private String sender;
     private String timeStamp ;
 
-    public ChatMessage(){
-        super("chat");
+    public ChatResponseMessage(){
+        super("reschat");
     }
     
     public void setMessage(String room, String message, String sender, String timeStamp) {
