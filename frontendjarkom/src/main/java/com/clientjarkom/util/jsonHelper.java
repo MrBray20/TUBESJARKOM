@@ -47,4 +47,9 @@ public class jsonHelper {
     public static CommadMessage parsercommandlistrooms(String json){
         return fromJson(json,CommadMessage.class);
     }
+
+    public static String commandJoin(String idRoom){
+        CommadMessage commadMessage = new CommadMessage("join", idRoom);
+        return toJson(commadMessage);
+    }
 }

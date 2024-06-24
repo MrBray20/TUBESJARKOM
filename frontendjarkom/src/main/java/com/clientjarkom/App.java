@@ -63,6 +63,11 @@ public class App extends Application {
             e.printStackTrace();
         }
     }
+    
+
+    public static void joinRoom(){
+        
+    }
 
     public static void command(String json){
         try {

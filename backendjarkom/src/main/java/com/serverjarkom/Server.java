@@ -32,6 +32,7 @@ public class Server {
             //             clientData.getString(4));
             //     clients.add(client);
             // }
+
             // ResultSet roomData = db.dblistRoom();
             // while (roomData.next()) {
             //     Client cl = null;

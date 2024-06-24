@@ -58,7 +58,6 @@ public class ClientHandler implements Runnable {
             String clientMessage;
             while ((clientMessage = in.readLine()) != null) {
                 messageHandler.handleMessage(clientMessage);
-
             }
 
             // out.println("Daftar/Login");
@@ -317,6 +316,7 @@ public class ClientHandler implements Runnable {
                     break;
                 case "join":
                     
+                    joinRoom(message);
                     break;
                 case "exit":
                     
@@ -332,7 +332,7 @@ public class ClientHandler implements Runnable {
                         room.put(setRoom.getString("id_room"), setRoom.getString("name_room"));
                     }
                     String json = jsonHelper.jsonCommandRoomList(action, message,room);
-                    sendMessage(json);;
+                    sendMessage(json);
                     break;
                 case "kick":
                     

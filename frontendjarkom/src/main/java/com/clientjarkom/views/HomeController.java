@@ -50,11 +50,12 @@ public class HomeController implements Initializable{
     @FXML
     void buttonCreateClick(ActionEvent event) throws Exception {
         App.createDialog();
+        refreshListView(updateListRoom());
     }
 
     @FXML
     void buttonJoinClick(ActionEvent event) {
-        refreshListView();
+
     }
 
     @FXML
@@ -70,30 +71,36 @@ public class HomeController implements Initializable{
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-        
+        listRooms(updateListRoom());
+    }
+
+    public Map<String,String> updateListRoom(){
         String json = jsonHelper.commandlistrooms(App.client.getUUID());
         App.auth(json);
         CommadMessage commadMessage;
         Object obj = App.resAuth();
         if (obj instanceof CommadMessage) {
             commadMessage = (CommadMessage) obj;
-            listRooms(commadMessage.getRoom());
+            return commadMessage.getRoom();
         }
-        
-        
+        return null;
     }
 
-    private void refreshListView() {
+    private void refreshListView(Map<String,String> room) {
         // Clear the existing items
         listView.getItems().clear();
 
         // Optionally, fetch new data from the server here
         // For demonstration, we'll add some example data
-        listView.getItems().addAll(
-                new GroupItem("New Group 1"),
-                new GroupItem("New Group 2"),
-                new GroupItem("New Group 3")
-        );
+        for (Map.Entry<String,String> Entry : room.entrySet()){
+            System.out.println(Entry.getKey());
+            String key = Entry.getKey();
+            String value = Entry.getValue();
+
+            GroupItem groupItem = new GroupItem(value,key);
+
+            listView.getItems().addAll(groupItem);
+        }
 
         // Refresh the ListView by calling listRooms()
     }
@@ -163,7 +170,7 @@ public class HomeController implements Initializable{
             String key = Entry.getKey();
             String value = Entry.getValue();
 
-            GroupItem groupItem = new GroupItem(value);
+            GroupItem groupItem = new GroupItem(value,key);
 
             listView.getItems().addAll(groupItem);
         }
@@ -172,8 +179,10 @@ public class HomeController implements Initializable{
 
 
     private void showRoom(GroupItem item) {
-        System.out.println("Showing room: " + item.getGroupName());
-        // Add your code here to show the room
+        System.out.println("Showing room: " + item.getGroupName() +"id : " + item.getidroom());
+        String json = jsonHelper.commandJoin(item.getidroom());
+        App.auth(json);
+
     }
 
     private void showDetails(GroupItem item) throws IOException {
@@ -186,16 +195,5 @@ public class HomeController implements Initializable{
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        // FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/clientjarkom/views/detail_view.fxml"));
-    //     Parent root = loader.load();
-
-    //     DetailViewController controller = loader.getController();
-    //     controller.setGroupItem(item);
-
-    //     Stage stage = new Stage();
-    //     stage.initModality(Modality.APPLICATION_MODAL);
-    //     stage.setTitle("Details");
-    //     stage.setScene(new Scene(root));
-    //     stage.showAndWait();
     }
 }
