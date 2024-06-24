@@ -2,13 +2,13 @@ package com.clientjarkom.model;
 
 import java.util.Map;
 
+import java.util.Map;
+
 public class CommadMessage extends Message {
     
     private String action;
     private String message;
-    private Map<String,String> rooms;
-
-    
+    private Map<String,String> room; // List untuk menyimpan daftar ruangan
 
     public CommadMessage(String action,String message){
         super("command");
@@ -16,15 +16,12 @@ public class CommadMessage extends Message {
         this.message = message;
     }
 
-    public CommadMessage(String action,String message,Map<String,String> room){
-        super("command");
-        this.action = action;
-        this.message = message;
-        this.rooms = room;
-    }
-
     public void setCommad(String action) {
         this.action = action;
+    }
+
+    public void setRoom(Map<String,String> roomList){
+        this.room = roomList;
     }
 
     public void setMessage(String message){
@@ -37,7 +34,7 @@ public class CommadMessage extends Message {
         return super.getType();
     }
 
-    public String getCommand() {
+    public String getAction() {
         return action;
     }
 
@@ -45,7 +42,8 @@ public class CommadMessage extends Message {
         return message;
     }
 
-    public Map<String,String> getroom(){
-        return this.rooms;
+    public Map<String,String> getRoom(){
+        return this.room;
     }
 }
+

@@ -70,19 +70,17 @@ public class HomeController implements Initializable{
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-        listRooms();
+        
         String json = jsonHelper.commandlistrooms(App.client.getUUID());
         App.auth(json);
+        CommadMessage commadMessage;
         Object obj = App.resAuth();
         if (obj instanceof CommadMessage) {
-
-            CommadMessage commadMessage = (CommadMessage) obj;
-            
-            for (Map<String,String> entry : commadMessage.getroom().entrySet()){
-                System.out.println(entry.getkey());
-            }
-            
+            commadMessage = (CommadMessage) obj;
+            listRooms(commadMessage.getRoom());
         }
+        
+        
     }
 
     private void refreshListView() {
@@ -100,7 +98,7 @@ public class HomeController implements Initializable{
         // Refresh the ListView by calling listRooms()
     }
 
-    private void listRooms(){
+    private void listRooms(Map<String,String> room){
         listView.setCellFactory(new Callback<ListView<GroupItem>, ListCell<GroupItem>>() {
             @Override
             public ListCell<GroupItem> call(ListView<GroupItem> param) {
@@ -159,11 +157,17 @@ public class HomeController implements Initializable{
         });
 
         // Example data
-        listView.getItems().addAll(
-                new GroupItem("Group 1"),
-                new GroupItem("Group 2"),
-                new GroupItem("Group 3")
-        );
+
+        for (Map.Entry<String,String> Entry : room.entrySet()){
+            System.out.println(Entry.getKey());
+            String key = Entry.getKey();
+            String value = Entry.getValue();
+
+            GroupItem groupItem = new GroupItem(value);
+
+            listView.getItems().addAll(groupItem);
+        }
+        
     }
 
 
